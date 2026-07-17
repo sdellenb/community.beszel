@@ -31,6 +31,9 @@ Environment="DOCKER_HOST={{ agent_docker_host }}"
 {% if agent_sensors is defined %}
 Environment="SENSORS={{ agent_sensors }}"
 {% endif %}
+{% if _has_smart %}
+Environment="SMART_DEVICES={{ agent_smart_disks | join(',') }}"
+{% endif %}
 Restart=on-failure
 RestartSec=5
 StateDirectory=beszel-agent
