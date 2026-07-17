@@ -56,7 +56,7 @@ DeviceAllow=/dev/nvidiactl rw
 DeviceAllow={{ gpu.path }} rw
 {% endfor %}
 {% for disk in agent_smart_disks %}
-DeviceAllow={{ disk }} r
+DeviceAllow={{ disk | regex_replace(':[a-z]+', '') }} r
 {% endfor %}
 {% for dev in agent_additional_devices %}
 DeviceAllow={{ dev.device }} {{ dev.mode }}
