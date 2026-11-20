@@ -31,9 +31,6 @@ Environment="DOCKER_HOST={{ agent_docker_host }}"
 {% if agent_sensors is defined %}
 Environment="SENSORS={{ agent_sensors }}"
 {% endif %}
-{% if _has_smart %}
-Environment="SMART_DEVICES={{ agent_smart_disks | join(',') }}"
-{% endif %}
 Restart=on-failure
 RestartSec=5
 StateDirectory=beszel-agent
@@ -45,6 +42,9 @@ SupplementaryGroups=systemd-journal
 {% set _has_nvidia = agent_gpus | selectattr('type', 'equalto', 'nvidia') | list | length > 0 %}
 {% set _has_intel = agent_gpus | selectattr('type', 'equalto', 'intel') | list | length > 0 %}
 {% set _caps = (['CAP_SYS_RAWIO', 'CAP_SYS_ADMIN'] if _has_smart else []) + (['CAP_PERFMON'] if _has_intel else []) + (['CAP_NET_RAW'] if agent_icmp else []) %}
+{% if _has_smart %}
+Environment="SMART_DEVICES={{ agent_smart_disks | join(',') }}"
+{% endif %}
 {% if _caps %}
 AmbientCapabilities={{ _caps | join(' ') }}
 CapabilityBoundingSet={{ _caps | join(' ') }}
